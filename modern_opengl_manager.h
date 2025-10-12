@@ -236,7 +236,7 @@ public:
     void setUniform(const std::string& name, const glm::vec3& vector) const {
         GLint location = getUniformLocation(name);
         if (location != -1) {
-            glUniform3fv(location, 1, glm::value_ptr(vector));
+            glUniform3fv(location, 1, glm::value_ptr(vector)); 
         }
     }
     
