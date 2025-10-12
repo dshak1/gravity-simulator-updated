@@ -3,7 +3,7 @@
         {
             "name": "macOS",
             "includePath": [
-                "${workspaceFolder}/**",
+             "${workspaceFolder}/**",
                 "/opt/homebrew/include",
                 "/opt/homebrew/opt/glfw/include",
                 "/opt/homebrew/opt/glew/include",
