@@ -16,7 +16,7 @@ The following libraries are required and should be installed via Homebrew:
 brew install glfw glew glm
 ```
 
-## Building the Project
+## Building the Project .
 
 ### Using Make (Recommended)
 bash
