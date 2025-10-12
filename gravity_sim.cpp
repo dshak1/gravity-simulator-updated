@@ -200,20 +200,51 @@ int main() {
     glm::mat4 projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 750000.0f);
     GLint projectionLoc = glGetUniformLocation(shaderProgram, "projection");
     glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
-    cameraPos = glm::vec3(0.0f, 1000.0f, 5000.0f);
+    // Set camera to a good viewing position for the solar system
+    cameraPos = glm::vec3(0.0f, 3000.0f, 8000.0f);
 
     
+    // EA SPORTS Gravity Simulation - Stable Solar System Scenario
+    // Demonstrates realistic orbital mechanics with proper initial conditions
     objs = {
-        //Object(glm::vec3(3844, 0, 0), glm::vec3(0, 0, 228), 7.34767309*pow(10, 22), 3344),
-        //Object(glm::vec3(0, 0, 0), glm::vec3(0, 0, 0), 1.989 * pow(10, 30), 5515, glm::vec4(1.0f, 0.929f, 0.176f, 1.0f)),
-       //Object(glm::vec3(0, 0, 0), glm::vec3(0, 0, 0), 5.97219*pow(10, 24), 5515, glm::vec4(0.0f, 1.0f, 1.0f, 1.0f)),
-       Object(glm::vec3(-5000, 650, -350), glm::vec3(0, 0, 1500), 5.97219*pow(10, 22), 5515, glm::vec4(0.0f, 1.0f, 1.0f, 1.0f)),
-       Object(glm::vec3(5000, 650, -350), glm::vec3(0, 0, -1500), 5.97219*pow(10, 22), 5515, glm::vec4(0.0f, 1.0f, 1.0f, 1.0f)),
-       Object(glm::vec3(0, 0, -350), glm::vec3(0, 0, 0), 1.989 * pow(10, 25), 5515, glm::vec4(1.0f, 0.929f, 0.176f, 1.0f), true),
-
+        // Central Sun (Yellow, massive, glowing)
+        Object(glm::vec3(0, 0, 0), glm::vec3(0, 0, 0), 1.989 * pow(10, 25), 5515, glm::vec4(1.0f, 0.929f, 0.176f, 1.0f), true),
+        
+        // Earth-like planet (Blue, stable orbit)
+        Object(glm::vec3(2000, 0, 0), glm::vec3(0, 0, 800), 5.97219*pow(10, 22), 5515, glm::vec4(0.0f, 0.3f, 0.8f, 1.0f)),
+        
+        // Mars-like planet (Red, outer orbit)
+        Object(glm::vec3(-3000, 0, 0), glm::vec3(0, 0, -600), 6.39*pow(10, 21), 5515, glm::vec4(0.8f, 0.2f, 0.1f, 1.0f)),
+        
+        // Moon orbiting Earth (Grey, small)
+        Object(glm::vec3(2200, 0, 0), glm::vec3(0, 0, 850), 7.34767309*pow(10, 20), 3344, glm::vec4(0.6f, 0.6f, 0.6f, 1.0f)),
+        
+        // Asteroid belt representative (Small, scattered)
+        Object(glm::vec3(4000, 500, 0), glm::vec3(0, 0, 400), 2.2*pow(10, 18), 3344, glm::vec4(0.4f, 0.4f, 0.2f, 1.0f)),
+        Object(glm::vec3(-4000, -300, 0), glm::vec3(0, 0, -350), 1.8*pow(10, 18), 3344, glm::vec4(0.3f, 0.3f, 0.1f, 1.0f)),
     };
-    std::vector<float> gridVertices = CreateGridVertices(20000.0f, 25, objs);
-    CreateVBOVAO(gridVAO, gridVBO, gridVertices.data(), gridVertices.size());
+    // Grid removed for cleaner, more stable simulation
+    // std::vector<float> gridVertices = CreateGridVertices(20000.0f, 25, objs);
+    // CreateVBOVAO(gridVAO, gridVBO, gridVertices.data(), gridVertices.size());
+    
+    // Print simulation information
+    std::cout << "\n=== EA SPORTS Gravity Simulation Engine ===" << std::endl;
+    std::cout << "Advanced 3D Physics Simulation with OpenGL" << std::endl;
+    std::cout << "===========================================" << std::endl;
+    std::cout << "Initialized " << objs.size() << " celestial bodies:" << std::endl;
+    std::cout << "- Central Sun (Yellow, glowing)" << std::endl;
+    std::cout << "- Earth-like planet (Blue)" << std::endl;
+    std::cout << "- Mars-like planet (Red)" << std::endl;
+    std::cout << "- Moon (Grey)" << std::endl;
+    std::cout << "- Asteroid belt objects (Brown)" << std::endl;
+    std::cout << "\nControls:" << std::endl;
+    std::cout << "- Mouse: Look around" << std::endl;
+    std::cout << "- WASD: Move camera" << std::endl;
+    std::cout << "- Space/Shift: Up/Down" << std::endl;
+    std::cout << "- Scroll: Zoom in/out" << std::endl;
+    std::cout << "- Click: Add objects" << std::endl;
+    std::cout << "- ESC: Exit simulation" << std::endl;
+    std::cout << "===========================================" << std::endl;
 
     while (!glfwWindowShouldClose(window) && running == true) {
         float currentFrame = glfwGetTime();
@@ -242,15 +273,8 @@ int main() {
             }
         }
 
-        // Draw the grid
-        glUseProgram(shaderProgram);
-        glUniform4f(objectColorLoc, 1.0f, 1.0f, 1.0f, 0.25f);
-        glUniform1i(glGetUniformLocation(shaderProgram, "isGrid"), 1);
-        glUniform1i(glGetUniformLocation(shaderProgram, "GLOW"), 0);
-        gridVertices = UpdateGridVertices(gridVertices, objs);
-        glBindBuffer(GL_ARRAY_BUFFER, gridVBO);
-        glBufferData(GL_ARRAY_BUFFER, gridVertices.size() * sizeof(float), gridVertices.data(), GL_DYNAMIC_DRAW);
-        DrawGrid(shaderProgram, gridVAO, gridVertices.size());
+        // Grid rendering removed for cleaner, more stable simulation
+        // The grid was causing shaking and performance issues
 
         // Draw the triangles / sphere
         for(auto& obj : objs) {
@@ -277,7 +301,6 @@ int main() {
 
                         //collision
                         obj.velocity *= obj.CheckCollision(obj2); //interactions with other objects
-                        std::cout<<"radius: "<<obj.radius<<std::endl;
                     }
                 }
             }
@@ -528,7 +551,7 @@ void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods){
     if (!objs.empty() && button == GLFW_MOUSE_BUTTON_RIGHT && objs[objs.size()-1].Initalizing) {
         if (action == GLFW_PRESS || action == GLFW_REPEAT) {
             objs[objs.size()-1].mass *= 1.2;}
-            std::cout<<"MASS: "<<objs[objs.size()-1].mass<<std::endl;
+            // Debug output removed for cleaner console
     }
 };
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset){
@@ -611,7 +634,7 @@ std::vector<float> UpdateGridVertices(std::vector<float> vertices, const std::ve
     }
 
     float verticalShift = comY - originalMaxY;
-    std::cout<<"vertical shift: "<<verticalShift<<" |         comY: "<<comY<<"|            originalmaxy: "<<originalMaxY<<std::endl;
+    // Debug output removed for cleaner console
 
 
     for (int i = 0; i < vertices.size(); i += 3) {

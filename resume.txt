@@ -1,0 +1,67 @@
+Diar Shakimov
+778-835-9482 | dsa158@sfu.ca
+ | linkedin.com/in/dshakimov | github.com/dshak1
+
+Education
+
+Simon Fraser University, Burnaby, BC
+BSc in Computer Science and Mathematics — Expected Apr 2027
+Relevant Coursework: Machine Learning, Data Structures & Algorithms, Numerical Analysis, Computer Systems
+
+Experience
+
+Undergraduate Research Assistant, Simon Fraser University - Cybersecurity Research — Burnaby, BC
+Sep 2024 – Present
+
+Architected multi-agent AI compliance auditing system using AWS Bedrock agents and LangChain, deployed on AWS with DynamoDB and S3, streamlining evidence collection workflows.
+
+Designed privileged/unprivileged MCP server architecture with differential access controls to secure handling of sensitive client data including medical and financial records.
+
+Integrated AWS Step Functions and Lambda with Gmail API to automate report generation and client communication, increasing audit efficiency and stakeholder engagement.
+
+Full Stack Software Developer Intern, Virtual Optimizer — Vancouver, BC
+Sep 2023 – Apr 2024
+
+Spearheaded development of SaaS platform integrating Facebook Ads with automated lead funnels using REST APIs and Python automation pipelines, engaging 10k+ potential customers.
+
+Constructed custom messaging pipelines with AI chatbots trained on client website content, improving lead qualification and boosting customer engagement rates.
+
+Optimized ad targeting and funnel conversion strategies, improving conversion efficiency across multiple client campaigns.
+
+Projects
+
+Einstein’s Spacetime Curvature Simulator — C++, OpenGL 3.3, GLSL, GLM, GLFW (Jul 2025)
+
+Architected interactive 3D physics engine in C++ with real-time gravity simulation implementing Newtonian pairwise force calculations, per-frame acceleration updates, and collision dampening across multiple celestial bodies with stable orbital mechanics.
+
+Engineered procedural mesh generation system creating sphere geometries on CPU with dynamic radius scaling based on mass parameters, uploaded to GPU vertex buffers eliminating external asset dependencies.
+
+Developed custom GLSL shader pipeline featuring per-fragment Phong lighting, emissive glow effects, and wireframe grid visualization, demonstrating graphics programming and GPU optimization techniques.
+
+Implemented interactive object authoring system with mouse-driven body spawning, real-time mass adjustment via UI controls, and drag-based repositioning during initialization phase, showcasing user interaction design.
+
+Built deformable reference grid approximating spacetime curvature by calculating vertex offsets from Schwarzschild radius and center of mass for each body, visualizing Einstein’s General Relativity through real-time 3D deformation.
+
+Created first-person camera system with mouse-look navigation, WASD translation, scroll-wheel zoom, and delta-time-based movement speed adjustments, maintaining smooth 60 FPS performance with GDB debugging and profiling.
+
+Text Processing Engine with Full-Stack Developer Tool — C, Python, Next.js, React, Valgrind (Aug 2025)
+
+Built memory-safe text tokenization engine in C with custom dynamic arraylist using automatic capacity doubling and generic void pointers, achieving zero memory leaks across 15+ Valgrind-verified test cases with Python-based automated testing infrastructure.
+
+Crafted full-stack developer tool with Next.js/React featuring split-pane code editor, real-time AST visualization, and RESTful API endpoints integrating C parser with JSON error handling, bridging low-level systems programming with interactive syntax highlighting.
+
+PyPath – Python Learning Platform — Next.js, TypeScript, Python, Tailwind CSS (Sep 2025)
+
+Engineered full-stack platform teaching 4 pathfinding algorithms through 8+ real production applications at Google Maps, Uber, and Unity, integrating AI-powered code review analyzing 5+ quality metrics with 10+ real-time performance visualizations; achieved runners-up at FallHacks hackathon.
+
+Implemented constraint-based challenges with memory/time bounds and energy efficiency metrics mirroring industry standards, with interactive React components bridging DSA theory to practice.
+
+Technical Skills
+
+Languages: C++, C, C#, Python, Java, JavaScript, TypeScript, HTML/CSS, GLSL, Swift
+
+Graphics & Game Dev: OpenGL 3.3, GLSL shaders, 3D graphics pipelines, real-time rendering, procedural generation
+
+Frameworks & Libraries: React, Next.js, Flask, LangChain, GLM, GLFW, NumPy, pandas, scikit-learn, Matplotlib
+
+Developer Tools: Git, GDB, Valgrind, Makefile, Bash, AWS, Google Cloud Platform, Vertex AI, Jupytern. 
