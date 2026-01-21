@@ -36,6 +36,8 @@ float yaw = -90;
 float pitch =0.0;
 float deltaTime = 0.0;
 float lastFrame = 0.0;
+int windowWidth = 800;
+int windowHeight = 600;
 
 const double G = 6.6743e-11; // m^3 kg^-1 s^-2
 const float c = 299792458.0;
@@ -48,6 +50,7 @@ void UpdateCam(GLuint shaderProgram, glm::vec3 cameraPos);
 void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
 void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
+void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 glm::vec3 sphericalToCartesian(float r, float theta, float phi);
@@ -277,10 +280,12 @@ int main() {
     glfwSetScrollCallback(window, scroll_callback);
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
-    //projection matrix
-    glm::mat4 projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 750000.0f);
+    // Initialize mouse position to center of window
+    lastX = windowWidth / 2.0f;
+    lastY = windowHeight / 2.0f;
+
+    //projection matrix - use actual window dimensions
     GLint projectionLoc = glGetUniformLocation(shaderProgram, "projection");
-    glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
     cameraPos = glm::vec3(0.0f, 1000.0f,  5000.0f);
 
     
@@ -324,6 +329,11 @@ int main() {
         lastFrame = currentFrame;
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+        
+        // Update projection matrix with current window dimensions
+        float aspectRatio = (float)windowWidth / (float)windowHeight;
+        glm::mat4 projection = glm::perspective(glm::radians(45.0f), aspectRatio, 0.1f, 750000.0f);
+        glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
 
         glfwSetKeyCallback(window, keyCallback);
         glfwSetMouseButtonCallback(window, mouseButtonCallback);
@@ -497,10 +507,16 @@ GLFWwindow* StartGLU() {
         return nullptr;
     }
 
+    // Get actual framebuffer size (important for Retina displays)
+    glfwGetFramebufferSize(window, &windowWidth, &windowHeight);
+    
     glEnable(GL_DEPTH_TEST);
-    glViewport(0, 0, 800, 600);
+    glViewport(0, 0, windowWidth, windowHeight);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); // Standard blending for transparency
+    
+    // Register framebuffer size callback for window resizing
+    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
     return window;
 }
@@ -850,9 +866,17 @@ void renderText(const std::string& text, float x, float y, float scale, GLuint s
         glDeleteBuffers(1, &textVBO);
     }
     
-    // Restore 3D projection
-    projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 750000.0f);
+    // Restore 3D projection (will be updated in main loop with current dimensions)
+    float aspectRatio = (float)windowWidth / (float)windowHeight;
+    projection = glm::perspective(glm::radians(45.0f), aspectRatio, 0.1f, 750000.0f);
     glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
+}
+
+// Framebuffer size callback to handle window resizing
+void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
+    windowWidth = width;
+    windowHeight = height;
+    glViewport(0, 0, width, height);
 }
 
 
