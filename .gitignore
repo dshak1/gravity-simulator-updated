@@ -9,6 +9,8 @@ gravity_sim_3Dgrid
 # Source files (older versions/tests)
 gravity_sim.cpp
 3D_test.cpp
+gravity_sim_3DgridDocumentation.cpp
+PROJECT_SHOWCASE.md
 
 # Header files (demonstration/boilerplate code)
 modern_opengl_manager.h
