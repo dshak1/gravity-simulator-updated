@@ -6,6 +6,10 @@ gravity_sim_3Dgrid
 *.out
 *.exe
 
+# Source files (older versions/tests)
+gravity_sim.cpp
+3D_test.cpp
+
 # Debug info
 *.dSYM/
 
@@ -48,4 +52,6 @@ Temporary Items
 # Temporary files
 *.tmp
 *.temp
-    
+
+# Interview prep documentation (generated)
+*.md

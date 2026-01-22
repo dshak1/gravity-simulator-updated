@@ -1,8 +1,8 @@
 # Makefile for OpenGL Gravity Simulator on macOS
 
 CXX = clang++
-CXXFLAGS = -std=c++17 -Wall -Wextra -O2 -DGL_SILENCE_DEPRECATION
-
+CXXFLAGS = -std=c++17 -Wall -Wextra -O1 -DGL_SILENCE_DEPRECATION \
+           -fsanitize=address -fsanitize=undefined -fno-omit-frame-pointer
 # Homebrew paths
 BREW_PREFIX = /opt/homebrew
 INCLUDE_DIRS = -I$(BREW_PREFIX)/include \
@@ -15,8 +15,8 @@ LIBRARY_DIRS = -L$(BREW_PREFIX)/lib \
                -L$(BREW_PREFIX)/opt/glew/lib
 
 # Libraries to link
-LIBS = -lglfw -lglew -framework OpenGL -framework Cocoa -framework IOKit -framework CoreVideo
-
+LIBS = -lglfw -lglew -framework OpenGL -framework Cocoa -framework IOKit -framework CoreVideo \
+       -fsanitize=address -fsanitize=undefined
 # Source files
 SOURCES_GRAVITY = gravity_sim.cpp
 SOURCES_3DGRID = gravity_sim_3Dgrid.cpp  
