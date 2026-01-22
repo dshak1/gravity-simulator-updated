@@ -104,16 +104,16 @@ Select from available configurations:
  Project Structure
 
 gravity_sim-main/
-├── gravity_sim.cpp            Main gravity simulator (deprecated)
-├── gravity_sim_3Dgrid.cpp     3D grid gravity simulator
-├── 3D_test.cpp                OpenGL test application
-├── Makefile                   Build configuration
-└── .vscode/                   VS Code configuration
-    ├── c_cpp_properties.json  IntelliSense configuration
-    ├── tasks.json             Build tasks
-    ├── launch.json            Debug configuration
-    └── settings.json          Editor settings
-```
+gravity_sim.cpp            Main gravity simulator (deprecated)
+gravity_sim_3Dgrid.cpp     3D grid gravity simulator
+3D_test.cpp                OpenGL test application
+ Makefile                   Build configuration
+.vscode/                   VS Code configuration
+    c_cpp_properties.json  IntelliSense configuration
+    tasks.json             Build tasks
+    launch.json            Debug configuration
+    settings.json          Editor settings
+
 
  PS
 - This project was originally found on youtube where it was developed for Windows and has been adapted for macOS
