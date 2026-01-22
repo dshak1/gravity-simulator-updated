@@ -36,8 +36,6 @@ float yaw = -90;
 float pitch =0.0;
 float deltaTime = 0.0;
 float lastFrame = 0.0;
-int windowWidth = 800;
-int windowHeight = 600;
 
 const double G = 6.6743e-11; // m^3 kg^-1 s^-2
 const float c = 299792458.0;
@@ -223,7 +221,7 @@ class Object {
                 trailSpheres.push_back(newSphere);
                 
                 // Keep trail at maximum length
-                if (trailSpheres.size() > maxTrailLength) {
+                if (trailSpheres.size() > static_cast<size_t>(maxTrailLength)) {
                     // Clean up the oldest sphere
                     glDeleteVertexArrays(1, &trailSpheres[0].VAO);
                     glDeleteBuffers(1, &trailSpheres[0].VBO);
@@ -278,14 +276,13 @@ int main() {
 
     glfwSetCursorPosCallback(window, mouse_callback);
     glfwSetScrollCallback(window, scroll_callback);
+    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
     glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
-    // Initialize mouse position to center of window
-    lastX = windowWidth / 2.0f;
-    lastY = windowHeight / 2.0f;
-
-    //projection matrix - use actual window dimensions
+    //projection matrix
+    glm::mat4 projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 750000.0f);
     GLint projectionLoc = glGetUniformLocation(shaderProgram, "projection");
+    glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
     cameraPos = glm::vec3(0.0f, 1000.0f,  5000.0f);
 
     
@@ -329,11 +326,6 @@ int main() {
         lastFrame = currentFrame;
 
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        
-        // Update projection matrix with current window dimensions
-        float aspectRatio = (float)windowWidth / (float)windowHeight;
-        glm::mat4 projection = glm::perspective(glm::radians(45.0f), aspectRatio, 0.1f, 750000.0f);
-        glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
 
         glfwSetKeyCallback(window, keyCallback);
         glfwSetMouseButtonCallback(window, mouseButtonCallback);
@@ -507,16 +499,15 @@ GLFWwindow* StartGLU() {
         return nullptr;
     }
 
-    // Get actual framebuffer size (important for Retina displays)
-    glfwGetFramebufferSize(window, &windowWidth, &windowHeight);
-    
     glEnable(GL_DEPTH_TEST);
-    glViewport(0, 0, windowWidth, windowHeight);
+    
+    // Get actual framebuffer size (important for Retina displays)
+    int framebufferWidth, framebufferHeight;
+    glfwGetFramebufferSize(window, &framebufferWidth, &framebufferHeight);
+    glViewport(0, 0, framebufferWidth, framebufferHeight);
+    
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); // Standard blending for transparency
-    
-    // Register framebuffer size callback for window resizing
-    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
     return window;
 }
@@ -586,6 +577,8 @@ void UpdateCam(GLuint shaderProgram, glm::vec3 cameraPos) {
 }
 
 void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
+    (void)window;
+    (void)scancode;
     bool shiftPressed = (mods & GLFW_MOD_SHIFT) != 0;
     
     // Simulation speed control with number keys (when pressed, not held)
@@ -643,7 +636,7 @@ void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods
     
 };
 void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
-
+    (void)window;
     float xoffset = xpos - lastX;
     float yoffset = lastY - ypos; 
     lastX = xpos;
@@ -666,6 +659,8 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos) {
     cameraFront = glm::normalize(front);
 }
 void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods){
+    (void)window;
+    (void)mods;
     if (button == GLFW_MOUSE_BUTTON_LEFT){
         if (action == GLFW_PRESS){
             objs.emplace_back(glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0f, 0.0f, 0.0f), initMass);
@@ -683,12 +678,19 @@ void mouseButtonCallback(GLFWwindow* window, int button, int action, int mods){
     // }
 };
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset){
+    (void)window;
+    (void)xoffset;
     float cameraSpeed = 50000.0f * deltaTime;
     if(yoffset>0){
         cameraPos += cameraSpeed * cameraFront;
     } else if(yoffset<0){
         cameraPos -= cameraSpeed * cameraFront;
     }
+}
+
+void framebuffer_size_callback(GLFWwindow* window, int width, int height){
+    (void)window;
+    glViewport(0, 0, width, height);
 }
 
 glm::vec3 sphericalToCartesian(float r, float theta, float phi){
@@ -780,8 +782,7 @@ std::vector<float> CreateGridVertices(float size, int divisions, const std::vect
     //     vertices[i+1] = vertexPos[1];
     //     vertices[i+2] = vertexPos[2];
     // }
-    float minz = 0.0f;
-    for (int i = 0; i < vertices.size(); i += 3) {
+    for (size_t i = 0; i < vertices.size(); i += 3) {
         glm::vec3 vertexPos(vertices[i], vertices[i+1], vertices[i+2]);
         glm::vec3 totalDisplacement(0.0f);
         
@@ -866,17 +867,9 @@ void renderText(const std::string& text, float x, float y, float scale, GLuint s
         glDeleteBuffers(1, &textVBO);
     }
     
-    // Restore 3D projection (will be updated in main loop with current dimensions)
-    float aspectRatio = (float)windowWidth / (float)windowHeight;
-    projection = glm::perspective(glm::radians(45.0f), aspectRatio, 0.1f, 750000.0f);
+    // Restore 3D projection
+    projection = glm::perspective(glm::radians(45.0f), 800.0f / 600.0f, 0.1f, 750000.0f);
     glUniformMatrix4fv(projectionLoc, 1, GL_FALSE, glm::value_ptr(projection));
-}
-
-// Framebuffer size callback to handle window resizing
-void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
-    windowWidth = width;
-    windowHeight = height;
-    glViewport(0, 0, width, height);
 }
 
 
