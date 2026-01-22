@@ -10,6 +10,10 @@ gravity_sim_3Dgrid
 gravity_sim.cpp
 3D_test.cpp
 
+# Header files (demonstration/boilerplate code)
+modern_opengl_manager.h
+modern_physics_engine.h
+
 # Debug info
 *.dSYM/
 
